@@ -7,16 +7,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Blog</a>
+      <a class="navbar-brand" href="#">DMCA</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/articles">Articles</a></li>
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>{!! link_to_action('ArticlesController@show', $latest->title,[$latest->id] ) !!}</li>
-      </ul>
-
     </div><!--/.nav-collapse -->
   </div>
 </nav>

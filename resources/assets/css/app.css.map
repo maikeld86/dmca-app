@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../stdin"],"names":[],"mappings":"AAAA;EACE,kBAAmB,EAEpB;;AAEA;EACE,iBAAiB,EAClB","file":"app.css","sourcesContent":["body{\r\n  padding-top:  60px;\r\n\r\n}\r\n\r\n body, label, .checkbox label{\r\n   font-weight: 300;\r\n }\r\n\r\n"],"sourceRoot":"/source/"}
