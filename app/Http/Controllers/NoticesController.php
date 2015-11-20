@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PrepareNoticeRequest;
+use App\Notice;
 use App\Provider;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class NoticesController extends Controller
 {
@@ -26,7 +29,7 @@ class NoticesController extends Controller
 
     public function index()
     {
-        return 'all notices';
+        return Auth::user()->notices;
     }
 
     /*
@@ -45,16 +48,70 @@ class NoticesController extends Controller
 
     }
 
-    /*
-    * create a new notices
-    *
-    * @ return \response
-    * */
 
-    public function confirm(PrepareNoticeRequest $request)
+    /**
+     *
+     * Aks the user to confirm the DMCA that will be deliverd
+     *
+     * @param PrepareNoticeRequest $request
+     * @param Guard $auth
+     * @return \Response
+     */
+    public function confirm(PrepareNoticeRequest $request, Guard $auth)
     {
-        //
-        return $request->all();
+        $template = $this->compiledDmcaTemplate($data = $request->all(), $auth);
+
+        session()->flash('dmca',$data);
+
+        return view('notices.confirm',compact('template'));
+    }
+
+    /**
+     * Store a new DMCA notice
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function store(Request $request)
+    {
+        //template
+        $this->createNotice($request);
+        //Auth::user()->notices()->save($notice);
+
+        return redirect('notices');
+    }
+
+    /**
+     *
+     * Compile the DMCA template from the form data.
+     *
+     * @param $data
+     * @param Guard $auth
+     * @return mixed
+     */
+    private function compiledDmcaTemplate($data, Guard $auth)
+    {
+        $data = $data + [
+
+            'name' => $auth->user()->name,
+            'email' => $auth->user()->email,
+
+        ];
+
+        return view()->file(app_path('Http/Templates/dmca.blade.php'), $data);
+    }
+
+    /**
+     * Create and persist a new DMCA notice
+     * @param Request $request
+     */
+    private function createNotice(Request $request)
+    {
+        $data = session()->get('dmca');
+
+        $notice = Notice::open($data)->useTemplate($request->input('template'));
+
+        Auth::user()->notices()->save($notice);
     }
 
 }
