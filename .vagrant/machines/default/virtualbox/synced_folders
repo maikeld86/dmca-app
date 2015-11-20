@@ -1,1 +1,1 @@
-{"virtualbox":{"/var/www":{"mount_options":["dmode=777","fmode=666"],"guestpath":"/var/www","hostpath":"E:/dmca-app1","disabled":false}}}
+{"virtualbox":{"/var/www":{"mount_options":["dmode=777","fmode=666"],"guestpath":"/var/www","hostpath":"C:/Users/maikel/dmca-app","disabled":false}}}
