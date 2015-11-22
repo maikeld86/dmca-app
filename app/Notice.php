@@ -20,25 +20,48 @@ class Notice extends Model
         'content_removed',
         'provider_id',
     ];
+
     /**
-     * Open a new notice
-     * @param array $attributes
-     * @return static
+     * A notice belongs to a recipient/provider
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public static function open(array $attributes)
+    public function recipient()
     {
-        return new static($attributes);
+        return $this->belongsTo('App\Provider', 'provider_id');
     }
 
     /**
-     * set the email template for the notice
+     * A notice is created by a user.
      *
-     * @param string $template
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function useTemplate($template)
+    public function user()
     {
-        $this->template = $template;
+        return $this->belongsTo('App\User');
+    }
 
-        return $this;
+    /**
+     * Get the email addres for the recipient of the DMCA
+     *
+     * @return string
+     */
+    public function getRecipientEmail()
+    {
+       // return $this->recipient()->copyright_email;
+
+        return $this->recipient->copyright_email;
+
+
+    }
+
+    /**
+     * get the email address of the owner of the notice.
+     *
+     * @return string
+     */
+    public function getOwnerEmail()
+    {
+        return $this->user->email;
     }
 }
